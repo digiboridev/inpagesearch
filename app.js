@@ -1,18 +1,25 @@
-function serch(name) {
+let serch = (name) => {
     let things = document.evaluate(`//*[contains(translate(text(),"ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ","abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"),"${name}")]`,document.body,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
     
     function myFunction(e) {
         console.log(e)
     }
     console.log(things)
+
+    document.querySelectorAll('.asdasd').forEach(e => {
+    	let innerTxt = e.innerHTML
+    	e.replaceWith(innerTxt)
+    })
+
+
     for (var i = 0; i < things.snapshotLength; i++) {
 
         let regex = new RegExp(name, 'i');
         let str = things.snapshotItem(i).innerHTML.replace(regex, '<span class="asdasd" style="color:blue;background:yellow">$&</span>');
         let snap = things.snapshotItem(i);
         things.snapshotItem(i).innerHTML = str
-        console.log(snap)
-        console.log(str)
+        // console.log(snap)
+        // console.log(str)
 
         if (things.snapshotItem(i).querySelector('.asdasd') == undefined) {
             console.log('yas')
@@ -36,4 +43,3 @@ function serch(name) {
 }
 serch('tsi')
 
-//asdasda
