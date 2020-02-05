@@ -1,21 +1,29 @@
-function highlight(name){
+function highlight(name,noclear){
 
-    document.querySelectorAll('.asdasd').forEach(e => {
-        // let innerTxt = e.innerHTML
-        // e.replaceWith(innerTxt)
+    name = name.toLocaleLowerCase();
 
-
-        e.parentNode.innerHTML = e.parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','')
-        // e.parentNode.innerHTML = e.parentNode.innerHTML.replace('</span>','')
-
-
-        // console.log(e.parentNode.innerHTML)
-    })
+    if(!noclear){
+        document.querySelectorAll('.asdasd').forEach(e => {
+            // let innerTxt = e.innerHTML
+            // e.replaceWith(innerTxt)
+            if(e.parentNode !== null){
+                let node = (e.parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','')).replace('</span>','');
+                e.parentNode.innerHTML = node;
+            }
+            
+    
+            // e.parentNode.innerHTML = e.parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','')
+            // e.parentNode.innerHTML = e.parentNode.innerHTML.replace('</span>','')
+            // console.log(node)
+            
+            // console.log(e.parentNode.innerHTML)
+        })
+    }
+    
 
 
 
     var things = document.evaluate(`//*[contains(translate(text(),"ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ","abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"),"${name}")]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-
 
 
 
@@ -38,7 +46,8 @@ function highlight(name){
         document.body.appendChild(el)
     }
 
-    function remover(event) {
+
+    function missClickDetector(event) {
 
         let detected = false;
         event.path.forEach(e => {
@@ -59,7 +68,7 @@ function highlight(name){
         }
 
     }
-    document.body.addEventListener("click", remover);
+    document.body.addEventListener("click", missClickDetector);
 
 
     function myFunction(e) {
@@ -67,8 +76,8 @@ function highlight(name){
 
         let content = `
         <button class="ppup_close" style="
-        width: 35px;
-        height: 20px;
+        min-width: 35px;
+        min-height: 20px;
         position: relative;
         float: right;
         font-size: 10px;
@@ -79,8 +88,22 @@ function highlight(name){
         outline: none;
         border: none;
         ">X</button>
-        <div style="height: 200px;width: 200px;margin: 20px;background:white;">
+        <div style="min-height: 200px;min-width: 200px;margin: 20px;background:#dfdfdf;">
                 <h3>The content</h3>
+                <h2>Element: ${e.target.innerText}</h3>
+                <img src="https://sciencenotes.org/wp-content/uploads/2019/01/001-Hydrogen.png" alt="Smiley face" width="200px">
+                <h2>Table</h3>
+                <table style="width:100%;padding: 10px;
+                text-align: left;">
+                  <tr>
+                    <th>Name</th>
+                    <th colspan="2">Telephone</th>
+                  </tr>
+                  <tr>
+                    <td>Bill Gates</td>
+                    <td>55577854</td>
+                  </tr>
+                </table>
         </div>
         `
         // let popupWraper = `
@@ -129,15 +152,16 @@ function highlight(name){
         } else {
             console.log('nau')
 
+            let hoverTimer;
 
             things.snapshotItem(i).querySelector('.asdasd').addEventListener('mouseover', (event) => {
                 if (event.currentTarget !== event.target) {
                     return;
                 }
                 // event.target.style.background = "purple";
-                setTimeout(() => {
+                hoverTimer = setTimeout(() => {
                     myFunction(event)                    
-                }, 2000);           
+                }, 1000);           
             })
 
             things.snapshotItem(i).querySelector('.asdasd').addEventListener('click', (event) => {
@@ -152,6 +176,7 @@ function highlight(name){
                 if (event.currentTarget !== event.target) {
                     return;
                 }
+                clearTimeout(hoverTimer)
                 // event.target.style.background = "yellow";
                 // myFunction(event)
 
