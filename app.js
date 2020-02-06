@@ -1,30 +1,30 @@
-function highlight(name,noclear){
+function highlight(name,name2){
 
     name = name.toLocaleLowerCase();
 
-    if(!noclear){
-        document.querySelectorAll('.asdasd').forEach(e => {
-            // let innerTxt = e.innerHTML
-            // e.replaceWith(innerTxt)
-            if(e.parentNode !== null){
-                let node = (e.parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','')).replace('</span>','');
-                e.parentNode.innerHTML = node;
-            }
-            
-    
-            // e.parentNode.innerHTML = e.parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','')
-            // e.parentNode.innerHTML = e.parentNode.innerHTML.replace('</span>','')
-            // console.log(node)
-            
-            // console.log(e.parentNode.innerHTML)
-        })
+    // if(!noclear){
+    //     document.querySelectorAll('.asdasd').forEach(e => {
+    //         if(e.parentNode !== null){
+    //             e.parentNode.innerHTML = e.parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','')
+    //         } else {
+    //             let innerTxt = e.innerHTML
+    //             e.replaceWith(innerTxt)
+    //         }
+    //     })
+    // }
+
+
+    var oldThings = document.evaluate('//*[@class="asdasd"]',document,null,XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,null);
+
+    for (var i = 0; i < oldThings.snapshotLength; i++) {
+        console.log(oldThings.snapshotItem(i))
+        // things.snapshotItem(i).style.outline = '1px solid red';
+        let str = oldThings.snapshotItem(i).parentNode.innerHTML.replace('<span class="asdasd" style="color:blue;background:yellow;">','');
+        oldThings.snapshotItem(i).parentNode.innerHTML = str;
     }
-    
 
 
-
-    var things = document.evaluate(`//*[contains(translate(text(),"ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ","abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"),"${name}")]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-
+    var things = document.evaluate(`/html/body//*[contains(translate(text(),"ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ","abcdefghijklmnopqrstuvwxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя"),"${name}")]`, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
 
 
@@ -106,24 +106,11 @@ function highlight(name,noclear){
                 </table>
         </div>
         `
-        // let popupWraper = `
-        // <div class="ppup" style="background: #dfdfdf;position: absolute;top: ${e.pageY + 20}px;left: ${e.pageX}px;z-index: 999;
-        // box-shadow: 0 0 40px black;
-        // border-radius: 10px;
-        // ">  
-            
-        //     ${content}
-        // </div>
-        // `
-
-
-
-
 
         document.querySelector('.ppup').parentNode.style.visibility = "visible"
         document.querySelector('.ppup').innerHTML = content;
         document.querySelector('.ppup').style.top = `${e.pageY + 20}px`;
-        document.querySelector('.ppup').style.left = `${e.pageX + 20}px`;
+        document.querySelector('.ppup').style.left = `${e.pageX - 100}px`;
         document.querySelector('.ppup').style.opacity = `1`;
 
         document.querySelector('.ppup_close').addEventListener('click', (event) => {
@@ -138,17 +125,16 @@ function highlight(name,noclear){
 
 
 
-
-
     for (var i = 0; i < things.snapshotLength; i++) {
-
-        let regex = new RegExp(name, 'i');
+        console.log(things.snapshotItem(i))
+        let regex = new RegExp(name, 'gi');
         let str = things.snapshotItem(i).innerHTML.replace(regex,
             `<span class="asdasd" style="color:blue;background:yellow;">$&</span>`);
-        things.snapshotItem(i).innerHTML = str
+        things.snapshotItem(i).innerHTML = str;
 
         if (things.snapshotItem(i).querySelector('.asdasd') == undefined) {
             console.log('yas')
+            console.log(things.snapshotItem(i))
         } else {
             console.log('nau')
 
